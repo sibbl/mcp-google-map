@@ -16,7 +16,7 @@ const server = new Server(
   },
   {
     capabilities: {
-      description: "An MCP server providing Google Maps integration!",
+      description: "An MCP server providing Google Maps integration",
       tools: {},
     },
   }
@@ -30,9 +30,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
     const { name, arguments: args } = request.params;
 
-    if (!args) {
-      throw new Error("No parameters provided");
-    }
+    if (!args) throw new Error("No parameters provided");
 
     if (name === "search_nearby") {
       const { center, keyword, radius, openNow, minRating } = args as {
@@ -43,17 +41,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         minRating?: number;
       };
 
-      const result = await placesSearcher.searchNearby({
-        center,
-        keyword,
-        radius,
-        openNow,
-        minRating,
-      });
+      const result = await placesSearcher.searchNearby({ center, keyword, radius, openNow, minRating });
 
       if (!result.success) {
         return {
-          content: [{ type: "text", text: result.error || "搜尋失敗" }],
+          content: [{ type: "text", text: result.error || "Search failed" }],
           isError: true,
         };
       }
@@ -62,7 +54,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         content: [
           {
             type: "text",
-            text: `location: ${JSON.stringify(result.location, null, 2)}\n` + JSON.stringify(result.data, null, 2),
+            text: `location: ${JSON.stringify(result.location, null, 2)}\n${JSON.stringify(result.data, null, 2)}`,
           },
         ],
         isError: false,
@@ -70,77 +62,55 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
 
     if (name === "get_place_details") {
-      const { placeId } = args as {
-        placeId: string;
-      };
+      const { placeId } = args as { placeId: string };
 
       const result = await placesSearcher.getPlaceDetails(placeId);
 
       if (!result.success) {
         return {
-          content: [{ type: "text", text: result.error || "獲取詳細資訊失敗" }],
+          content: [{ type: "text", text: result.error || "Failed to fetch place details" }],
           isError: true,
         };
       }
 
       return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(result.data, null, 2),
-          },
-        ],
+        content: [{ type: "text", text: JSON.stringify(result.data, null, 2) }],
         isError: false,
       };
     }
 
     if (name === "maps_geocode") {
-      const { address } = args as {
-        address: string;
-      };
+      const { address } = args as { address: string };
 
       const result = await placesSearcher.geocode(address);
 
       if (!result.success) {
         return {
-          content: [{ type: "text", text: result.error || "地址轉換座標失敗" }],
+          content: [{ type: "text", text: result.error || "Geocoding failed" }],
           isError: true,
         };
       }
 
       return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(result.data, null, 2),
-          },
-        ],
+        content: [{ type: "text", text: JSON.stringify(result.data, null, 2) }],
         isError: false,
       };
     }
 
     if (name === "maps_reverse_geocode") {
-      const { latitude, longitude } = args as {
-        latitude: number;
-        longitude: number;
-      };
+      const { latitude, longitude } = args as { latitude: number; longitude: number };
 
       const result = await placesSearcher.reverseGeocode(latitude, longitude);
 
       if (!result.success) {
         return {
-          content: [{ type: "text", text: result.error || "座標轉換地址失敗" }],
+          content: [{ type: "text", text: result.error || "Reverse geocoding failed" }],
           isError: true,
         };
       }
 
       return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(result.data, null, 2),
-          },
-        ],
+        content: [{ type: "text", text: JSON.stringify(result.data, null, 2) }],
         isError: false,
       };
     }
@@ -156,18 +126,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       if (!result.success) {
         return {
-          content: [{ type: "text", text: result.error || "計算距離矩陣失敗" }],
+          content: [{ type: "text", text: result.error || "Distance matrix calculation failed" }],
           isError: true,
         };
       }
 
       return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(result.data, null, 2),
-          },
-        ],
+        content: [{ type: "text", text: JSON.stringify(result.data, null, 2) }],
         isError: false,
       };
     }
@@ -183,59 +148,42 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       if (!result.success) {
         return {
-          content: [{ type: "text", text: result.error || "獲取路線指引失敗" }],
+          content: [{ type: "text", text: result.error || "Fetching directions failed" }],
           isError: true,
         };
       }
 
       return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(result.data, null, 2),
-          },
-        ],
+        content: [{ type: "text", text: JSON.stringify(result.data, null, 2) }],
         isError: false,
       };
     }
 
     if (name === "maps_elevation") {
-      const { locations } = args as {
-        locations: Array<{ latitude: number; longitude: number }>;
-      };
+      const { locations } = args as { locations: Array<{ latitude: number; longitude: number }> };
 
       const result = await placesSearcher.getElevation(locations);
 
       if (!result.success) {
         return {
-          content: [{ type: "text", text: result.error || "獲取海拔數據失敗" }],
+          content: [{ type: "text", text: result.error || "Elevation data fetching failed" }],
           isError: true,
         };
       }
 
       return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(result.data, null, 2),
-          },
-        ],
+        content: [{ type: "text", text: JSON.stringify(result.data, null, 2) }],
         isError: false,
       };
     }
 
     return {
-      content: [{ type: "text", text: `錯誤：未知的工具 ${name}` }],
+      content: [{ type: "text", text: `Error: Unknown tool '${name}'` }],
       isError: true,
     };
   } catch (error) {
     return {
-      content: [
-        {
-          type: "text",
-          text: `錯誤：${error instanceof Error ? error.message : String(error)}`,
-        },
-      ],
+      content: [{ type: "text", text: `Error: ${error instanceof Error ? error.message : String(error)}` }],
       isError: true,
     };
   }

@@ -99,7 +99,7 @@ export class PlacesSearcher {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "搜尋時發生錯誤",
+        error: error instanceof Error ? error.message : "Error occurred during search",
       };
     }
   }
@@ -131,7 +131,7 @@ export class PlacesSearcher {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "獲取詳細資訊時發生錯誤",
+        error: error instanceof Error ? error.message : "Error occurred while fetching place details",
       };
     }
   }
@@ -147,7 +147,7 @@ export class PlacesSearcher {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "地址轉換座標時發生錯誤",
+        error: error instanceof Error ? error.message : "Error occurred while converting address to coordinates",
       };
     }
   }
@@ -163,7 +163,7 @@ export class PlacesSearcher {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "座標轉換地址時發生錯誤",
+        error: error instanceof Error ? error.message : "Error occurred while converting coordinates to address",
       };
     }
   }
@@ -179,7 +179,7 @@ export class PlacesSearcher {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "計算距離矩陣時發生錯誤",
+        error: error instanceof Error ? error.message : "Error occurred while calculating distance matrix",
       };
     }
   }
@@ -195,7 +195,7 @@ export class PlacesSearcher {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "獲取路線指引時發生錯誤",
+        error: error instanceof Error ? error.message : "Error occurred while fetching directions",
       };
     }
   }
@@ -211,7 +211,7 @@ export class PlacesSearcher {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "獲取海拔數據時發生錯誤",
+        error: error instanceof Error ? error.message : "Error occurred while fetching elevation data",
       };
     }
   }
